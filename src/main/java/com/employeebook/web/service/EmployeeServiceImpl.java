@@ -6,10 +6,7 @@ import com.employeebook.web.exception.EmployeeStorageIsFullException;
 import com.employeebook.web.model.Employee;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -32,7 +29,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Collection<Employee> findAll() {
-        return employeeBook;
+        return Collections.unmodifiableList(employeeBook);
     }
 
     @Override
