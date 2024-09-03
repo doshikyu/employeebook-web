@@ -1,4 +1,4 @@
-package com.employeebook.web;
+package com.employeebook.web.model;
 
 import java.util.Objects;
 

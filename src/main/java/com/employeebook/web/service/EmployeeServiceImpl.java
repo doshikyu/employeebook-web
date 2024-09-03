@@ -1,16 +1,23 @@
-package com.employeebook.web;
+package com.employeebook.web.service;
 
+import com.employeebook.web.exception.EmployeeAlreadyAddedException;
+import com.employeebook.web.exception.EmployeeNotFoundException;
+import com.employeebook.web.exception.EmployeeStorageIsFullException;
+import com.employeebook.web.model.Employee;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 @Service
-public class EmployeeService {
+public class EmployeeServiceImpl implements EmployeeService {
     private final int MAX_EMPLOYEES = 12;
+    private final List<Employee> employeeBook;
 
-    private List<Employee> employeeBook = new ArrayList<>(Arrays.asList(
+    public EmployeeServiceImpl() {
+        employeeBook = new ArrayList<>(Arrays.asList(
             new Employee("Анна", "Каренина"),
             new Employee("Дмитрий", "Гуров"),
             new Employee("Иван", "Чимша-Гималайский"),
@@ -21,15 +28,15 @@ public class EmployeeService {
             new Employee("Надежда", "Михайлова"),
             new Employee("Андрей", "Рагин"),
             new Employee("Николай", "Подгорин")));
-
-    public EmployeeService() {
     }
 
-    public List<Employee> getEmployeeBook() {
+    @Override
+    public Collection<Employee> findAll() {
         return employeeBook;
     }
 
-    public void addEmployee(String firstName, String lastName) {
+    @Override
+    public Employee addEmployee(String firstName, String lastName) {
         if (employeeBook.size() >= MAX_EMPLOYEES) {
             throw new EmployeeStorageIsFullException("Превышен лимит количества сотрудников в фирме");
         }
@@ -38,12 +45,17 @@ public class EmployeeService {
             throw new EmployeeAlreadyAddedException("Уже есть такой сотрудник");
         }
         employeeBook.add(employeeToAdd);
+        return employeeToAdd;
     }
 
-    public void removeEmployee(String firstName, String lastName) {
-        employeeBook.remove(findEmployee(firstName, lastName));
+    @Override
+    public Employee removeEmployee(String firstName, String lastName) {
+        Employee employeeToRemove = findEmployee(firstName, lastName);
+        employeeBook.remove(employeeToRemove);
+        return employeeToRemove;
     }
 
+    @Override
     public Employee findEmployee(String firstName, String lastName) {
         for (Employee employee : employeeBook) {
             if (employee.equals(new Employee(firstName, lastName))) {
