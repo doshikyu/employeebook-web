@@ -1,7 +1,5 @@
 package com.employeebook.web.controller;
 
-import com.employeebook.web.exception.EmployeeAlreadyAddedException;
-import com.employeebook.web.exception.EmployeeStorageIsFullException;
 import com.employeebook.web.model.Employee;
 import com.employeebook.web.service.EmployeeService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,17 +24,19 @@ public class EmployeeController {
     }
 
     @GetMapping(path = "/add")
-    public Employee addEmployeeCtrl(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
-        return employeeService.addEmployee(firstName, lastName);
+    public Employee addEmployeeCtrl(@RequestParam("birthday") String birthday,
+                                    @RequestParam("firstName") String firstName,
+                                    @RequestParam("lastName") String lastName) {
+        return employeeService.addEmployee(birthday, firstName, lastName);
     }
 
     @GetMapping(path = "/remove")
-    public Employee removeEmployeeCtrl(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
-        return employeeService.removeEmployee(firstName, lastName);
+    public Employee removeEmployeeCtrl(@RequestParam("birthday") String birthday) {
+        return employeeService.removeEmployee(birthday);
     }
 
     @GetMapping(path = "/find")
-    public Employee findEmployeeCtrl(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
-        return employeeService.findEmployee(firstName, lastName);
+    public Employee findEmployeeCtrl(@RequestParam("birthday") String birthday) {
+        return employeeService.findEmployee(birthday);
     }
 }
