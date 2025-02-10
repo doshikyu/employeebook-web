@@ -11,10 +11,11 @@ import java.util.stream.Collectors;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
-    private final EmployeeService employees = new EmployeeServiceImpl();
+    private final EmployeeService employees;
     private Map<Integer, String> departmentService;
 
-    public DepartmentServiceImpl() {
+    public DepartmentServiceImpl(EmployeeService employees) {
+        this.employees = employees;
         departmentService = new HashMap<>();
         departmentService.put(1, "Маркетинг");
         departmentService.put(2, "IT");
