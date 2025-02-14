@@ -1,7 +1,5 @@
 package com.employeebook.web.controller;
 
-import com.employeebook.web.exception.EmployeeAlreadyAddedException;
-import com.employeebook.web.exception.EmployeeStorageIsFullException;
 import com.employeebook.web.model.Employee;
 import com.employeebook.web.service.EmployeeService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/employee")
@@ -21,22 +20,26 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public Collection<Employee> findAllEmployees() {
-        return employeeService.findAll();
+    public List<String> findAllEmployees() {
+        return employeeService.findAllNames();
     }
 
     @GetMapping(path = "/add")
-    public Employee addEmployeeCtrl(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
-        return employeeService.addEmployee(firstName, lastName);
+    public Employee addEmployeeCtrl(@RequestParam("birthday") String birthday,
+                                    @RequestParam("firstName") String firstName,
+                                    @RequestParam("lastName") String lastName,
+                                    @RequestParam("salary") int salary,
+                                    @RequestParam("departmentId") int departmentId) {
+        return employeeService.addEmployee(birthday, firstName, lastName, salary, departmentId);
     }
 
     @GetMapping(path = "/remove")
-    public Employee removeEmployeeCtrl(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
-        return employeeService.removeEmployee(firstName, lastName);
+    public Employee removeEmployeeCtrl(@RequestParam("birthday") String birthday) {
+        return employeeService.removeEmployee(birthday);
     }
 
     @GetMapping(path = "/find")
-    public Employee findEmployeeCtrl(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
-        return employeeService.findEmployee(firstName, lastName);
+    public Employee findEmployeeCtrl(@RequestParam("birthday") String birthday) {
+        return employeeService.findEmployee(birthday);
     }
 }

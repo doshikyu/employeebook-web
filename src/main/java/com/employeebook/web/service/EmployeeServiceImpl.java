@@ -7,58 +7,67 @@ import com.employeebook.web.model.Employee;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
     private final int MAX_EMPLOYEES = 12;
-    private final List<Employee> employeeBook;
+    private final Map<String, Employee> employeesMap;
 
     public EmployeeServiceImpl() {
-        employeeBook = new ArrayList<>(Arrays.asList(
-            new Employee("Анна", "Каренина"),
-            new Employee("Дмитрий", "Гуров"),
-            new Employee("Иван", "Чимша-Гималайский"),
-            new Employee("Дмитрий", "Старцев"),
-            new Employee("Сергей", "Толстой"),
-            new Employee("Михаил", "Тонкий"),
-            new Employee("Иван", "Лаевский"),
-            new Employee("Надежда", "Михайлова"),
-            new Employee("Андрей", "Рагин"),
-            new Employee("Николай", "Подгорин")));
+        this.employeesMap = new HashMap<>();
+        employeesMap.putAll(Map.of(
+                "741223", new Employee("Анна", "Каренина", 80000, 1),
+                "760428", new Employee("Дмитрий", "Гуров", 190000, 2),
+                "830109", new Employee("Иван", "Чимша-Гималайский", 70000, 3),
+                "670315", new Employee("Дмитрий", "Старцев", 150000, 4),
+                "850726", new Employee("Сергей", "Толстой", 78000, 1),
+                "900518", new Employee("Михаил", "Тонкий", 60000, 2),
+                "080254", new Employee("Иван", "Лаевский", 72000, 3),
+                "170699", new Employee("Надежда", "Михайлова", 250000, 4),
+                "700727", new Employee("Андрей", "Рагин", 210000, 2),
+                "921231", new Employee("Николай", "Подгорин", 90000, 4)
+        ));
     }
 
     @Override
-    public Collection<Employee> findAll() {
-        return Collections.unmodifiableList(employeeBook);
+    public List<String> findAllNames() {
+        List<Employee> employees = employeesMap.values().stream().toList();
+        return employees.stream()
+                .map(employee -> employee.getFullName())
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Employee addEmployee(String firstName, String lastName) {
-        if (employeeBook.size() >= MAX_EMPLOYEES) {
+    public List<Employee> findAll() {
+        return new ArrayList<>(employeesMap.values());
+    }
+
+    @Override
+    public Employee addEmployee(String birthday, String firstName, String lastName, int salary, int department) {
+        if (employeesMap.size() >= MAX_EMPLOYEES) {
             throw new EmployeeStorageIsFullException("Превышен лимит количества сотрудников в фирме");
         }
-        Employee employeeToAdd = new Employee(firstName, lastName);
-        if (employeeBook.contains(employeeToAdd)) {
+
+        Employee employeeToAdd = new Employee(firstName, lastName, salary, department);
+        if (employeesMap.containsKey(birthday) && employeesMap.get(birthday).getLastName().equals(lastName)) {
             throw new EmployeeAlreadyAddedException("Уже есть такой сотрудник");
         }
-        employeeBook.add(employeeToAdd);
+        employeesMap.put(birthday, employeeToAdd);
         return employeeToAdd;
     }
 
     @Override
-    public Employee removeEmployee(String firstName, String lastName) {
-        Employee employeeToRemove = findEmployee(firstName, lastName);
-        employeeBook.remove(employeeToRemove);
+    public Employee removeEmployee(String birthday) {
+        Employee employeeToRemove = findEmployee(birthday);
+        employeesMap.remove(birthday);
         return employeeToRemove;
     }
 
     @Override
-    public Employee findEmployee(String firstName, String lastName) {
-        for (Employee employee : employeeBook) {
-            if (employee.equals(new Employee(firstName, lastName))) {
-                return employee;
-            }
-        }
+    public Employee findEmployee(String birthday) {
+        if (employeesMap.containsKey(birthday)) return employeesMap.get(birthday);
         throw new EmployeeNotFoundException("Сотрудник не найден");
     }
 }
+
