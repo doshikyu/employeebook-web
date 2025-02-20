@@ -3,11 +3,14 @@ package com.employeebook.web.service;
 import com.employeebook.web.exception.EmployeeAlreadyAddedException;
 import com.employeebook.web.exception.EmployeeNotFoundException;
 import com.employeebook.web.exception.EmployeeStorageIsFullException;
+import com.employeebook.web.exception.InvalidInputException;
 import com.employeebook.web.model.Employee;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.StringUtils.isAlpha;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -16,6 +19,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     public EmployeeServiceImpl() {
         this.employeesMap = new HashMap<>();
+        // testing purposes
         employeesMap.putAll(Map.of(
                 "741223", new Employee("Анна", "Каренина", 80000, 1),
                 "760428", new Employee("Дмитрий", "Гуров", 190000, 2),
@@ -49,6 +53,13 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new EmployeeStorageIsFullException("Превышен лимит количества сотрудников в фирме");
         }
 
+        Set<Integer> validDepartments = Set.of(1, 2, 3, 4);
+        if (!validDepartments.contains(department)) {
+            throw new InvalidInputException("No Department");
+        }
+
+        validateInput(firstName, lastName);
+
         Employee employeeToAdd = new Employee(firstName, lastName, salary, department);
         if (employeesMap.containsKey(birthday) && employeesMap.get(birthday).getLastName().equals(lastName)) {
             throw new EmployeeAlreadyAddedException("Уже есть такой сотрудник");
@@ -68,6 +79,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Employee findEmployee(String birthday) {
         if (employeesMap.containsKey(birthday)) return employeesMap.get(birthday);
         throw new EmployeeNotFoundException("Сотрудник не найден");
+    }
+
+    private void validateInput(String firstName, String lastName) {
+        if (!(isAlpha(firstName) & isAlpha(lastName))) {
+            throw new InvalidInputException("Invalid first or last name input.");
+        }
     }
 }
 

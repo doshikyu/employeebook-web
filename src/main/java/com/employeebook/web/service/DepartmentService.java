@@ -1,9 +1,18 @@
 package com.employeebook.web.service;
 
+import com.employeebook.web.model.Employee;
+
+import java.util.List;
+import java.util.Map;
+
 public interface DepartmentService {
-    String getMaxSalaryInDepartment(int departmentId);
+    Map<Integer, List<Employee>> getAllEmployeesByDepartment();
 
-    String getMinSalaryInDepartment(int departmentId);
+    List<Employee> getEmployeesByDepartmentId(int departmentId);
 
-    Object getEmployeesByDepartment(Integer departmentId);
+    Integer getSumSalaryByDepartment(int departmentId);
+
+    Integer getMaxSalaryInDepartment(int departmentId);
+
+    Integer getMinSalaryInDepartment(int departmentId);
 }

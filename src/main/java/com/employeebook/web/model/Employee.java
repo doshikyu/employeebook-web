@@ -2,6 +2,8 @@ package com.employeebook.web.model;
 
 import java.util.Objects;
 
+import static org.apache.commons.lang3.StringUtils.capitalize;
+
 public class Employee {
     private String firstName;
     private String lastName;
@@ -9,8 +11,8 @@ public class Employee {
     private int departmentId;
 
     public Employee(String firstName, String lastName, int salary, int departmentId) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.firstName = capitalize(firstName.toLowerCase());
+        this.lastName = capitalize(lastName.toLowerCase());
         this.salary = salary;
         this.departmentId = departmentId;
     }
@@ -47,7 +49,7 @@ public class Employee {
         this.departmentId = departmentId;
     }
 
-    public String getFullName(){
+    public String getFullName() {
         return this.firstName + " " + this.lastName;
     }
 
