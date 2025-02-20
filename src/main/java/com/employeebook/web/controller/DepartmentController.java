@@ -1,7 +1,11 @@
 package com.employeebook.web.controller;
 
+import com.employeebook.web.model.Employee;
 import com.employeebook.web.service.DepartmentService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/departments")
@@ -12,18 +16,28 @@ public class DepartmentController {
         this.departmentService = departmentService;
     }
 
-    @GetMapping(path = "/max-salary")
-    public String getMaxSalaryInDepartment(@RequestParam("departmentId") int departmentId) {
-        return departmentService.getMaxSalaryInDepartment(departmentId);
+    @GetMapping(path = "/employees")
+    public Map<Integer, List<Employee>> getAllEmployeesByDepartment() {
+        return departmentService.getAllEmployeesByDepartment();
     }
 
-    @GetMapping(path = "/min-salary")
-    public String getMinSalaryInDepartment(@RequestParam("departmentId") int departmentId) {
-        return departmentService.getMinSalaryInDepartment(departmentId);
+    @GetMapping(path = "/{id}/employees")
+    public List<Employee> getEmployeesByDepartmentId(@PathVariable int id) {
+        return departmentService.getEmployeesByDepartmentId(id);
     }
 
-    @GetMapping(path = "/all")
-    public Object getEmployees(@RequestParam(required = false) Integer departmentId) {
-            return departmentService.getEmployeesByDepartment(departmentId);
+    @GetMapping(path = "/{id}/salary/sum")
+    public Integer getSumSalaryByDepartment (@PathVariable int id) {
+        return departmentService.getSumSalaryByDepartment(id);
+    }
+
+    @GetMapping(path = "/{id}/salary/max")
+    public Integer getMaxSalaryInDepartment(@PathVariable int id) {
+        return departmentService.getMaxSalaryInDepartment(id);
+    }
+
+    @GetMapping(path = "/{id}/salary/min")
+    public Integer getMinSalaryInDepartment(@PathVariable int id) {
+        return departmentService.getMinSalaryInDepartment(id);
     }
 }
