@@ -19,19 +19,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     public EmployeeServiceImpl() {
         this.employeesMap = new HashMap<>();
-        // testing purposes
-        employeesMap.putAll(Map.of(
-                "741223", new Employee("Анна", "Каренина", 80000, 1),
-                "760428", new Employee("Дмитрий", "Гуров", 190000, 2),
-                "830109", new Employee("Иван", "Чимша-Гималайский", 70000, 3),
-                "670315", new Employee("Дмитрий", "Старцев", 150000, 4),
-                "850726", new Employee("Сергей", "Толстой", 78000, 1),
-                "900518", new Employee("Михаил", "Тонкий", 60000, 2),
-                "080254", new Employee("Иван", "Лаевский", 72000, 3),
-                "170699", new Employee("Надежда", "Михайлова", 250000, 4),
-                "700727", new Employee("Андрей", "Рагин", 210000, 2),
-                "921231", new Employee("Николай", "Подгорин", 90000, 4)
-        ));
     }
 
     @Override
