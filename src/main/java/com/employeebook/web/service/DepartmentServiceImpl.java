@@ -1,5 +1,6 @@
 package com.employeebook.web.service;
 
+import com.employeebook.web.exception.EmployeeNotFoundException;
 import com.employeebook.web.model.Employee;
 import org.springframework.stereotype.Service;
 
@@ -66,7 +67,7 @@ public class DepartmentServiceImpl implements DepartmentService {
                 .filter(e -> e.getDepartmentId().equals(departmentId))
                 .max(Comparator.comparingInt(employee -> employee.getSalary()))
                 .map(employee -> employee.getSalary())
-                .orElseThrow(() -> new RuntimeException("No Department or Employee Found"));
+                .orElseThrow(() -> new EmployeeNotFoundException("No Department or Employee Found"));
     }
 
     @Override
@@ -76,6 +77,6 @@ public class DepartmentServiceImpl implements DepartmentService {
                 .filter(e -> e.getDepartmentId().equals(departmentId))
                 .min(Comparator.comparingInt(employee -> employee.getSalary()))
                 .map(employee -> employee.getSalary())
-                .orElseThrow(() -> new RuntimeException("No Department or Employee Found"));
+                .orElseThrow(() -> new EmployeeNotFoundException("No Department or Employee Found"));
     }
 }
